@@ -1,0 +1,17 @@
+.container{
+    display: flex;
+    margin-top: 5.2rem;
+    margin-bottom: 5.5rem;
+}
+.btn-dark{
+    border-radius: 10%;
+}
+h1{
+    color: rgb(212, 151, 71);
+}
+p{
+    color: rgb(15, 26, 22);
+}
+.im{
+    border-radius: 15%;
+}
