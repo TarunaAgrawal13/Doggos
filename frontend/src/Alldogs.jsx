@@ -2,6 +2,7 @@ import Dogcard from "./dogcard";
 import Grid from "@mui/material/Grid";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import AddDog from "./AddDog";
 
 export default function Alldogs() {
   const [dogs, setDogs] = useState([]);

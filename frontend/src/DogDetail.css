@@ -1,0 +1,54 @@
+.dog-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #f8d7da, #fceabb);
+  padding: 20px;
+}
+
+.dog-card {
+  width: 380px;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dog-name {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.dog-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.dog-title {
+  font-size: 1rem;
+  color: #555;
+}
+
+.dog-info {
+  text-align: left;
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+
+.dog-info p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+}
+
+.dog-description {
+  font-size: 0.9rem;
+  color: #666;
+}
