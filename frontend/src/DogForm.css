@@ -1,0 +1,59 @@
+body{
+  background:#f4f6fb;
+}
+
+.dog-form-container{
+  width:450px;
+  margin:60px auto;
+  padding:30px;
+  background:white;
+  border-radius:12px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+.dog-form-container h2{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.dog-form{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.dog-form input,
+.dog-form textarea{
+  padding:10px;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
+
+.dog-form textarea{
+  min-height:90px;
+}
+
+.dog-form button{
+  padding:12px;
+  border:none;
+  border-radius:6px;
+  background:#1976d2;
+  color:white;
+  cursor:pointer;
+}
+
+.dog-form button:hover{
+  background:#0f4ea3;
+}
+
+.form-group{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+
+.form-group label{
+  font-weight:600;
+  font-size:14px;
+  color:#333;
+}

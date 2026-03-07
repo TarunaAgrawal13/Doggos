@@ -1,5 +1,6 @@
 import "./Home.css";
 import { Link } from "react-router-dom";
+import AddDog from "./AddDog";
 export default function home() {
   return (
     <>
@@ -72,12 +73,11 @@ export default function home() {
 </div>
 
 
-
-
-
-
-
-
+<div className="align-items-center text-center mb-5">
+<Link to="/add-dog" className="btn btn-success ">
+  Add Dog
+</Link>
+</div>
 
     </>
   );
