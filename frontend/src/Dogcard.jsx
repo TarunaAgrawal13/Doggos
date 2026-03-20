@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
 
-export default function Dogcard({ id, name, image, title }) {
+export default function Dogcard({ _id, name, image, title }) {
   const navigate = useNavigate();
 
   return (
@@ -30,7 +30,7 @@ export default function Dogcard({ id, name, image, title }) {
       <CardActions>
         <Button 
           size="small"
-          onClick={() => navigate(`/dogs/${id}`)}
+          onClick={() => navigate(`/dogs/${_id}`)}
         >
           See More
         </Button>

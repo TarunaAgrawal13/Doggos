@@ -1,9 +1,13 @@
 import "./Home.css";
 import { Link } from "react-router-dom";
-import AddDog from "./AddDog";
+import AddDog from "../AddDog";
+import Navbar from "../components/Navbar";
+
+
 export default function home() {
   return (
     <>
+      <Navbar />
       <div className="container">
         <div className="row align-items-center">
           <div className="col-6">

@@ -19,7 +19,7 @@ useEffect(() => {
   return (
     <Grid container spacing={3}>
       {dogs?.map((dog) => (
-        <Grid item xs={12} md={4} key={dog.id}>
+        <Grid item xs={12} md={4} key={dog._id}>
           <Dogcard {...dog} />
         </Grid>
       ))}

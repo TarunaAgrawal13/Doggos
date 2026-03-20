@@ -1,139 +1,106 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import "./DogForm.css";
+import axios from "axios";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 export default function EditDog() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const [dog, setDog] = useState({
+  const [form, setForm] = useState({
     name: "",
-    image: "",
-    title: "",
     breed: "",
     age: "",
     weight: "",
     color: "",
-    description: ""
+    image: "",
+    title: "",
+    description: "",
   });
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/dogs/${id}`)
-      .then((res) => {
-        setDog(res.data);
-      })
-      .catch((err) => console.log(err));
+      .get(`${import.meta.env.VITE_API_URL}/dogs/${id}`)
+      .then((res) => setForm(res.data))
+      .catch(() => setError("Failed to load dog data"));
   }, [id]);
 
   const handleChange = (e) => {
-    setDog({
-      ...dog,
-      [e.target.name]: e.target.value
-    });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
     try {
-      await axios.put(`http://localhost:3000/dogs/${id}`, dog);
-      alert("Dog updated successfully 🐶");
+      setLoading(true);
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/dogs/${id}`,
+        { ...form, age: Number(form.age), weight: Number(form.weight) },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       navigate(`/dogs/${id}`);
-    } catch (error) {
-      console.log(error);
+    } catch {
+      setError("Failed to update. You may not be the owner.");
+    } finally {
+      setLoading(false);
     }
   };
 
+  const fields = [
+    { name: "name", label: "Name" },
+    { name: "breed", label: "Breed" },
+    { name: "age", label: "Age (years)", type: "number" },
+    { name: "weight", label: "Weight (kg)", type: "number" },
+    { name: "color", label: "Color" },
+    { name: "image", label: "Image URL" },
+    { name: "title", label: "Title" },
+  ];
+
   return (
-    <div className="dog-form-container">
-      <h2>Edit Dog</h2>
+    <Box sx={{ maxWidth: 500, margin: "auto", padding: 4 }}>
+      <Typography variant="h4" sx={{ mb: 3 }}>Edit Dog</Typography>
 
-      <form className="dog-form" onSubmit={handleSubmit}>
+      {error && <Typography color="error" sx={{ mb: 2 }}>{error}</Typography>}
 
-        <div className="form-group">
-          <label>Dog Name</label>
-          <input
-            type="text"
-            name="name"
-            value={dog.name}
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+      >
+        {fields.map((f) => (
+          <TextField
+            key={f.name}
+            name={f.name}
+            label={f.label}
+            type={f.type || "text"}
+            value={form[f.name]}
             onChange={handleChange}
           />
-        </div>
+        ))}
 
-        <div className="form-group">
-          <label>Image URL</label>
-          <input
-            type="text"
-            name="image"
-            value={dog.image}
-            onChange={handleChange}
-          />
-        </div>
+        <TextField
+          name="description"
+          label="Description"
+          multiline
+          rows={4}
+          value={form.description}
+          onChange={handleChange}
+        />
 
-        <div className="form-group">
-          <label>Title</label>
-          <input
-            type="text"
-            name="title"
-            value={dog.title}
-            onChange={handleChange}
-          />
-        </div>
+        <Button type="submit" variant="contained" disabled={loading}>
+          {loading ? "Saving..." : "Save Changes"}
+        </Button>
 
-        <div className="form-group">
-          <label>Breed</label>
-          <input
-            type="text"
-            name="breed"
-            value={dog.breed}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Age</label>
-          <input
-            type="number"
-            name="age"
-            value={dog.age}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Weight</label>
-          <input
-            type="text"
-            name="weight"
-            value={dog.weight}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Color</label>
-          <input
-            type="text"
-            name="color"
-            value={dog.color}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Description</label>
-          <textarea
-            name="description"
-            value={dog.description}
-            onChange={handleChange}
-          />
-        </div>
-
-        <button type="submit">Update Dog</button>
-
-      </form>
-    </div>
+        <Button onClick={() => navigate(`/dogs/${id}`)}>Cancel</Button>
+      </Box>
+    </Box>
   );
 }

@@ -1,131 +1,102 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./DogForm.css";
+import axios from "axios";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 export default function AddDog() {
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const [dog, setDog] = useState({
+  const [form, setForm] = useState({
     name: "",
-    image: "",
-    title: "",
     breed: "",
     age: "",
     weight: "",
     color: "",
-    description: ""
+    image: "",
+    title: "",
+    description: "",
   });
 
   const handleChange = (e) => {
-    setDog({
-      ...dog,
-      [e.target.name]: e.target.value
-    });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
+    if (!form.name || !form.breed || !form.age) {
+      return setError("Name, breed and age are required");
+    }
 
     try {
-      await axios.post("http://localhost:3000/dogs", dog);
-      alert("Dog added successfully 🐶");
+      setLoading(true);
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/dogs`,
+        { ...form, age: Number(form.age), weight: Number(form.weight) },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       navigate("/dogs");
-    } catch (error) {
-      console.log(error);
+    } catch {
+      setError("Failed to add dog. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
+  const fields = [
+    { name: "name", label: "Name" },
+    { name: "breed", label: "Breed" },
+    { name: "age", label: "Age (years)", type: "number" },
+    { name: "weight", label: "Weight (kg)", type: "number" },
+    { name: "color", label: "Color" },
+    { name: "image", label: "Image URL" },
+    { name: "title", label: "Title" },
+  ];
+
   return (
-    <div className="dog-form-container">
-      <h2>Add New Dog</h2>
+    <Box sx={{ maxWidth: 500, margin: "auto", padding: 4 }}>
+      <Typography variant="h4" sx={{ mb: 3 }}>Add a Dog</Typography>
 
-      <form className="dog-form" onSubmit={handleSubmit}>
+      {error && <Typography color="error" sx={{ mb: 2 }}>{error}</Typography>}
 
-        <div className="form-group">
-          <label>Dog Name</label>
-          <input
-            type="text"
-            name="name"
-            placeholder="Enter dog name"
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Image URL</label>
-          <input
-            type="text"
-            name="image"
-            placeholder="Enter image link"
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Title</label>
-          <input
-            type="text"
-            name="title"
-            placeholder="Short title"
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+      >
+        {fields.map((f) => (
+          <TextField
+            key={f.name}
+            name={f.name}
+            label={f.label}
+            type={f.type || "text"}
+            value={form[f.name]}
             onChange={handleChange}
           />
-        </div>
+        ))}
 
-        <div className="form-group">
-          <label>Breed</label>
-          <input
-            type="text"
-            name="breed"
-            placeholder="Dog breed"
-            onChange={handleChange}
-          />
-        </div>
+        <TextField
+          name="description"
+          label="Description"
+          multiline
+          rows={4}
+          value={form.description}
+          onChange={handleChange}
+        />
 
-        <div className="form-group">
-          <label>Age</label>
-          <input
-            type="number"
-            name="age"
-            placeholder="Age"
-            onChange={handleChange}
-          />
-        </div>
+        <Button type="submit" variant="contained" disabled={loading}>
+          {loading ? "Adding..." : "Add Dog"}
+        </Button>
 
-        <div className="form-group">
-          <label>Weight</label>
-          <input
-            type="text"
-            name="weight"
-            placeholder="Weight"
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Color</label>
-          <input
-            type="text"
-            name="color"
-            placeholder="Dog color"
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Description</label>
-          <textarea
-            name="description"
-            placeholder="Write description about the dog"
-            onChange={handleChange}
-          />
-        </div>
-
-        <button type="submit">Add Dog</button>
-
-      </form>
-    </div>
+        <Button onClick={() => navigate("/dogs")}>Cancel</Button>
+      </Box>
+    </Box>
   );
 }

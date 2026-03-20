@@ -1,77 +1,178 @@
 const express = require('express');
 const cors = require('cors');
-let dogs = require("./data");
-
+const connectDB = require("./init/db");
+const Dog = require("./models/Dog");
 const app = express();
+require("dotenv").config();
+const authRoutes = require("./routes/auth");
+const authMiddleware = require("./middleware/authMiddleware");
 app.use(cors());
 app.use(express.json());
+app.use("/auth", authRoutes);
 
-app.get("/dogs", (req, res) => {
+connectDB();   // connect database
+
+app.get("/dogs", async(req, res) => {
+  const dogs = await Dog.find();
   res.json(dogs);
 });
 
 
-app.post("/dogs", (req, res) => {
-  const newDog = {
-    id: Date.now().toString(),
-    name: req.body.name,
-    image: req.body.image,
-    title: req.body.title,
-    breed: req.body.breed,
-    age: req.body.age,
-    weight: req.body.weight,
-    color: req.body.color,
-    description: req.body.description
-  };
+app.post("/dogs",authMiddleware, async(req, res) => {
+  // const newDog = {
+  //   id: Date.now().toString(),
+  //   name: req.body.name,
+  //   image: req.body.image,
+  //   title: req.body.title,
+  //   breed: req.body.breed,
+  //   age: req.body.age,
+  //   weight: req.body.weight,
+  //   color: req.body.color,
+  //   description: req.body.description
+  // };
 
-  dogs.push(newDog);
+  // dogs.push(newDog);
 
-  res.status(201).json(newDog);
-});
+  // res.status(201).json(newDog);
 
-
-app.get("/dogs/:id", (req, res) => {
-  const dog = dogs.find(d => d.id == req.params.id);
-  if (!dog) return res.status(404).json({ message: "Dog not found" });
-  res.json(dog);
-});
+  //  const newDog = new Dog(req.body);
+  //  await newDog.save();
+  //  res.status(201).json(newDog);
 
 
-app.put("/dogs/:id", (req, res) => {
-  const id = req.params.id;
 
-  const dogIndex = dogs.findIndex(dog => dog.id == id);
+  try {
 
-  if (dogIndex === -1) {
-    return res.status(404).json({ message: "Dog not found" });
+    const dog = new Dog({
+      ...req.body,
+      owner: req.user.userId
+    });
+
+    await dog.save();
+
+    res.status(201).json(dog);
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: error.message
+    });
+
   }
 
-  dogs[dogIndex] = {
-    ...dogs[dogIndex],
-    ...req.body
-  };
-
-  res.json({
-    message: "Dog updated successfully",
-    dog: dogs[dogIndex]
-  });
 });
 
-app.delete("/dogs/:id", (req, res) => {
-  const id = req.params.id;
 
-  const index = dogs.findIndex(dog => dog.id == id);
+app.get("/dogs/:id", async (req, res) => {
+  try {
+    const dog = await Dog.findById(req.params.id);
 
-  if (index === -1) {
-    return res.status(404).json({ message: "Dog not found" });
+    if (!dog) {
+      return res.status(404).json({ message: "Dog not found" });
+    }
+
+    res.json(dog);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+// app.put("/dogs/:id", async (req, res) => {
+//   try {
+//     const updatedDog = await Dog.findByIdAndUpdate(
+//       req.params.id,
+//       req.body,
+//       { new: true }
+//     );
+
+//     res.json(updatedDog);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
+
+app.put("/dogs/:id", authMiddleware, async (req, res) => {
+
+  try {
+
+    const dog = await Dog.findById(req.params.id);
+
+    if (!dog) {
+      return res.status(404).json({
+        message: "Dog not found"
+      });
+    }
+
+    if (dog.owner.toString() !== req.user.userId) {
+      return res.status(403).json({
+        message: "Not authorized"
+      });
+    }
+
+    const updatedDog = await Dog.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    res.json(updatedDog);
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: error.message
+    });
+
   }
 
-  const deletedDog = dogs.splice(index, 1);
+});
 
-  res.json({
-    message: "Dog deleted successfully",
-    dog: deletedDog
-  });
+
+
+// app.delete("/dogs/:id", async (req, res) => {
+//   try {
+//     await Dog.findByIdAndDelete(req.params.id);
+//     res.json({ message: "Dog deleted successfully 🐶" });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
+
+app.delete("/dogs/:id", authMiddleware, async (req, res) => {
+
+  try {
+
+    const dog = await Dog.findById(req.params.id);
+
+    if (!dog) {
+      return res.status(404).json({
+        message: "Dog not found"
+      });
+    }
+
+    if (dog.owner.toString() !== req.user.userId) {
+      return res.status(403).json({
+        message: "Not authorized"
+      });
+    }
+
+    await Dog.findByIdAndDelete(req.params.id);
+
+    res.json({
+      message: "Dog deleted successfully"
+    });
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: error.message
+    });
+
+  }
+
 });
 
 
