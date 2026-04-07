@@ -1,0 +1,74 @@
+/* ── GRID ── */
+.alldogs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .alldogs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .alldogs-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── LOADING STATE ── */
+.alldogs-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 80px 24px;
+  color: #6b7280;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.alldogs-loading__spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #ea580c;
+  border-radius: 50%;
+  animation: alldogs-spin 0.7s linear infinite;
+}
+
+@keyframes alldogs-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── EMPTY STATE ── */
+.alldogs-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 80px 24px;
+  text-align: center;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.alldogs-empty__icon {
+  font-size: 40px;
+  margin-bottom: 4px;
+}
+
+.alldogs-empty h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.alldogs-empty p {
+  font-size: 14px;
+  color: #9ca3af;
+}

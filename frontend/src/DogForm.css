@@ -1,59 +1,237 @@
-body{
-  background:#f4f6fb;
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+/* ── KEYFRAMES ── */
+@keyframes formFadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.dog-form-container{
-  width:450px;
-  margin:60px auto;
-  padding:30px;
-  background:white;
-  border-radius:12px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.1);
+@keyframes labelFloat {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.dog-form-container h2{
-  text-align:center;
-  margin-bottom:25px;
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
 }
 
-.dog-form{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
+/* ── PAGE ── */
+body {
+  background: #faf8f5;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
 }
 
+/* ── WRAPPER ── */
+.dog-form-container {
+  width: 100%;
+  max-width: 560px;
+  margin: 52px auto 80px;
+  padding: 0 20px;
+  animation: formFadeUp 0.5s ease both;
+}
+
+/* ── HEADER ── */
+.dog-form-container h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: #1a1209;
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+  text-align: left;
+}
+
+.dog-form-container h2 span {
+  color: #ea580c;
+}
+
+.dog-form-container p {
+  font-size: 14px;
+  color: #9c8f7e;
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+/* ── CARD ── */
+.dog-form-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 36px 36px 32px;
+  border: 1px solid #ede8df;
+  box-shadow:
+    0 2px 4px rgba(0,0,0,0.04),
+    0 12px 40px rgba(180, 120, 60, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Warm top accent line */
+.dog-form-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ea580c, #f97316, #fbbf24);
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ── FORM ── */
+.dog-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── FORM GROUP ── */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  animation: labelFloat 0.4s ease both;
+}
+
+.form-group:nth-child(1) { animation-delay: 0.05s; }
+.form-group:nth-child(2) { animation-delay: 0.10s; }
+.form-group:nth-child(3) { animation-delay: 0.15s; }
+.form-group:nth-child(4) { animation-delay: 0.20s; }
+.form-group:nth-child(5) { animation-delay: 0.25s; }
+.form-group:nth-child(6) { animation-delay: 0.30s; }
+
+.form-group label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #6b5f52;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+/* ── INPUTS ── */
 .dog-form input,
-.dog-form textarea{
-  padding:10px;
-  border-radius:6px;
-  border:1px solid #ccc;
+.dog-form textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #e8e0d5;
+  border-radius: 9px;
+  font-size: 14.5px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 500;
+  color: #1a1209;
+  background: #fdfcfb;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
-.dog-form textarea{
-  min-height:90px;
+.dog-form input::placeholder,
+.dog-form textarea::placeholder {
+  color: #c4b8a8;
+  font-weight: 400;
 }
 
-.dog-form button{
-  padding:12px;
-  border:none;
-  border-radius:6px;
-  background:#1976d2;
-  color:white;
-  cursor:pointer;
+.dog-form input:hover,
+.dog-form textarea:hover {
+  border-color: #d4c9bb;
+  background: #ffffff;
 }
 
-.dog-form button:hover{
-  background:#0f4ea3;
+.dog-form input:focus,
+.dog-form textarea:focus {
+  border-color: #ea580c;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.08);
 }
 
-.form-group{
-  display:flex;
-  flex-direction:column;
-  gap:5px;
+.dog-form textarea {
+  min-height: 110px;
+  resize: vertical;
+  line-height: 1.7;
 }
 
-.form-group label{
-  font-weight:600;
-  font-size:14px;
-  color:#333;
+/* ── TWO-COL ROW (optional) ── */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* ── DIVIDER ── */
+.form-divider {
+  height: 1px;
+  background: #f0ebe3;
+  margin: 4px 0;
+}
+
+/* ── SUBMIT BUTTON ── */
+.dog-form button[type="submit"],
+.dog-form .btn-submit {
+  padding: 13px 24px;
+  border: none;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #ea580c, #c2410c);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.2px;
+  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.30);
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.dog-form button[type="submit"]:hover,
+.dog-form .btn-submit:hover {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  box-shadow: 0 6px 22px rgba(234, 88, 12, 0.42);
+  transform: translateY(-1px);
+}
+
+.dog-form button[type="submit"]:active,
+.dog-form .btn-submit:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(234, 88, 12, 0.30);
+}
+
+.dog-form button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── BUTTON SPINNER ── */
+.dog-form-spinner {
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: dog-form-spin 0.65s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes dog-form-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 560px) {
+  .dog-form-container {
+    margin: 32px auto 60px;
+  }
+
+  .dog-form-card {
+    padding: 28px 22px 26px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
 }

@@ -1,106 +1,161 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import { useNavigate, useParams } from "react-router-dom";
+import "./DogForm.css";
+import Navbar from "./components/Navbar";
 
 export default function EditDog() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [form, setForm] = useState({
+  const [dog, setDog] = useState({
     name: "",
+    image: "",
+    title: "",
     breed: "",
     age: "",
     weight: "",
     color: "",
-    image: "",
-    title: "",
     description: "",
   });
 
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_API_URL}/dogs/${id}`)
-      .then((res) => setForm(res.data))
-      .catch(() => setError("Failed to load dog data"));
+      .then((res) => setDog(res.data))
+      .catch((err) => console.log(err));
   }, [id]);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setDog({ ...dog, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-
     try {
       setLoading(true);
-      await axios.put(
-        `${import.meta.env.VITE_API_URL}/dogs/${id}`,
-        { ...form, age: Number(form.age), weight: Number(form.weight) },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.put(`${import.meta.env.VITE_API_URL}/dogs/${id}`, dog);
       navigate(`/dogs/${id}`);
-    } catch {
-      setError("Failed to update. You may not be the owner.");
-    } finally {
+    } catch (error) {
+      console.log(error);
       setLoading(false);
     }
   };
 
-  const fields = [
-    { name: "name", label: "Name" },
-    { name: "breed", label: "Breed" },
-    { name: "age", label: "Age (years)", type: "number" },
-    { name: "weight", label: "Weight (kg)", type: "number" },
-    { name: "color", label: "Color" },
-    { name: "image", label: "Image URL" },
-    { name: "title", label: "Title" },
-  ];
-
   return (
-    <Box sx={{ maxWidth: 500, margin: "auto", padding: 4 }}>
-      <Typography variant="h4" sx={{ mb: 3 }}>Edit Dog</Typography>
+    <>
+      <Navbar />
 
-      {error && <Typography color="error" sx={{ mb: 2 }}>{error}</Typography>}
+      <div className="dog-form-container">
+        <h2>Edit <span>Dog</span></h2>
+        <p>Update the details below to keep the listing accurate and up to date.</p>
 
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-      >
-        {fields.map((f) => (
-          <TextField
-            key={f.name}
-            name={f.name}
-            label={f.label}
-            type={f.type || "text"}
-            value={form[f.name]}
-            onChange={handleChange}
-          />
-        ))}
+        <div className="dog-form-card">
+          <form className="dog-form" onSubmit={handleSubmit}>
 
-        <TextField
-          name="description"
-          label="Description"
-          multiline
-          rows={4}
-          value={form.description}
-          onChange={handleChange}
-        />
+            <div className="form-group">
+              <label>Dog Name</label>
+              <input
+                type="text"
+                name="name"
+                value={dog.name}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-        <Button type="submit" variant="contained" disabled={loading}>
-          {loading ? "Saving..." : "Save Changes"}
-        </Button>
+            <div className="form-group">
+              <label>Image URL</label>
+              <input
+                type="text"
+                name="image"
+                value={dog.image}
+                onChange={handleChange}
+                required
+              />
+            </div>
 
-        <Button onClick={() => navigate(`/dogs/${id}`)}>Cancel</Button>
-      </Box>
-    </Box>
+            <div className="form-group">
+              <label>Title</label>
+              <input
+                type="text"
+                name="title"
+                value={dog.title}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="form-divider" />
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>Breed</label>
+                <input
+                  type="text"
+                  name="breed"
+                  value={dog.breed}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>Color</label>
+                <input
+                  type="text"
+                  name="color"
+                  value={dog.color}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <label>Age</label>
+                <input
+                  type="number"
+                  name="age"
+                  value={dog.age}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>Weight</label>
+                <input
+                  type="text"
+                  name="weight"
+                  value={dog.weight}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            <div className="form-divider" />
+
+            <div className="form-group">
+              <label>Description</label>
+              <textarea
+                name="description"
+                value={dog.description}
+                onChange={handleChange}
+              />
+            </div>
+
+            <button type="submit" disabled={loading}>
+              {loading ? (
+                <>
+                  <span className="dog-form-spinner" /> Saving...
+                </>
+              ) : (
+                <>
+                  ✏️ &nbsp; Update Dog
+                </>
+              )}
+            </button>
+
+          </form>
+        </div>
+      </div>
+    </>
   );
 }
