@@ -1,40 +1,34 @@
-import './Dogcard.css'
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia'
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+import './Dogcard.css';
 import { useNavigate } from "react-router-dom";
 
 export default function Dogcard({ _id, name, image, title }) {
   const navigate = useNavigate();
 
   return (
-    <Card sx={{ width: "62vh" }} className='cd'>
-      <CardMedia
-        sx={{ height: 300 }}
-        image={image}
-      />
+    <div className="dogcard" onClick={() => navigate(`/dogs/${_id}`)}>
+      <div className="dogcard__media">
+        <img className="dogcard__img" src={image} alt={name} />
+      </div>
 
-      <CardContent>
-        <Typography gutterBottom variant="h5">
-          {name}
-        </Typography>
+      <div className="dogcard__body">
+        <h3 className="dogcard__name">{name}</h3>
+        <p className="dogcard__title">{title}</p>
+      </div>
 
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          {title}
-        </Typography>
-      </CardContent>
-
-      <CardActions>
-        <Button 
-          size="small"
-          onClick={() => navigate(`/dogs/${_id}`)}
+      <div className="dogcard__footer">
+        <button
+          className="dogcard__btn"
+          onClick={(e) => { e.stopPropagation(); navigate(`/dogs/${_id}`); }}
         >
           See More
-        </Button>
-      </CardActions>
-    </Card>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" strokeWidth="2.5"
+            strokeLinecap="round" strokeLinejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </button>
+      </div>
+    </div>
   );
 }

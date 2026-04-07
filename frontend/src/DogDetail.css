@@ -1,54 +1,271 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* ── BASE ── */
 .dog-page {
+  background: #f9fafb;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #f8d7da, #fceabb);
-  padding: 20px;
+  padding: 40px 0 80px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-.dog-card {
-  width: 380px;
-  background: white;
-  padding: 1.5rem;
-  border-radius: 15px;
-  text-align: center;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+.dog-page__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+/* ── LOADING ── */
+.dog-loading {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 60vh;
+  color: #6b7280;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
 }
 
-.dog-name {
-  font-size: 1.8rem;
+.dog-loading__spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #ea580c;
+  border-radius: 50%;
+  animation: dog-spin 0.7s linear infinite;
+}
+
+@keyframes dog-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── BREADCRUMB ── */
+.dog-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.dog-breadcrumb__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
   font-weight: 600;
-  color: #333;
+  color: #6b7280;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  transition: color 0.15s ease;
 }
 
-.dog-image {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
+.dog-breadcrumb__back:hover {
+  color: #111827;
+}
+
+.dog-breadcrumb__sep {
+  color: #d1d5db;
+  font-size: 14px;
+}
+
+.dog-breadcrumb__current {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* ── LAYOUT ── */
+.dog-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+
+/* ── MEDIA ── */
+.dog-media__frame {
   border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -1px rgba(0,0,0,0.04);
+  position: sticky;
+  top: 88px;
 }
 
-.dog-title {
-  font-size: 1rem;
-  color: #555;
+.dog-media__img {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  display: block;
 }
 
-.dog-info {
-  text-align: left;
-  border-top: 1px solid #eee;
-  padding-top: 10px;
+/* ── DETAILS ── */
+.dog-details {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
 }
 
-.dog-info p {
-  margin: 4px 0;
-  font-size: 0.95rem;
+.dog-details__header {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.dog-description {
-  font-size: 0.9rem;
-  color: #666;
+.dog-details__name {
+  font-size: 32px;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.8px;
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+
+.dog-details__title {
+  font-size: 15px;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+/* ── INFO GRID ── */
+.dog-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.dog-info-grid__item {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dog-info-grid__label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #9ca3af;
+}
+
+.dog-info-grid__value {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* ── DESCRIPTION ── */
+.dog-desc {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+
+.dog-desc__label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #9ca3af;
+  margin-bottom: 10px;
+}
+
+.dog-desc__text {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #374151;
+}
+
+/* ── ACTIONS ── */
+.dog-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 4px;
+}
+
+.dog-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.dog-btn--edit {
+  color: #374151;
+  background: #ffffff;
+  border-color: #d1d5db;
+}
+
+.dog-btn--edit:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+  color: #111827;
+}
+
+.dog-btn--delete {
+  color: #dc2626;
+  background: #fef2f2;
+  border-color: #fca5a5;
+}
+
+.dog-btn--delete:hover:not(:disabled) {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #ffffff;
+}
+
+.dog-btn--delete:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .dog-layout {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .dog-media__frame {
+    position: static;
+  }
+
+  .dog-media__img {
+    height: 280px;
+  }
+
+  .dog-details__name {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dog-info-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dog-actions {
+    flex-direction: column;
+  }
+
+  .dog-btn {
+    justify-content: center;
+  }
 }

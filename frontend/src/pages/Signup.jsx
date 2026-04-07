@@ -1,15 +1,14 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import { Link, useNavigate } from "react-router-dom";
+import "./Login.css";
 
 export default function Signup() {
   const navigate = useNavigate();
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const [form, setForm] = useState({
     username: "",
@@ -19,74 +18,193 @@ export default function Signup() {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-
-    if (!form.username || !form.email || !form.password) {
-      return setError("All fields are required");
-    }
-
-    if (form.password.length < 6) {
-      return setError("Password must be at least 6 characters");
-    }
-
     try {
       setLoading(true);
-      await axios.post(
+      setError("");
+      const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/auth/register`,
         form
       );
-      navigate("/login");
-    } catch (err) {
-      setError(err.response?.data?.message || "Registration failed");
-    } finally {
+      setSuccess(res.data.message || "Account created! Redirecting...");
+      setTimeout(() => navigate("/login"), 1500);
+    } catch (error) {
+      setError(error.response?.data?.message || "Something went wrong. Try again.");
       setLoading(false);
     }
   };
 
   return (
-    <Box sx={{ maxWidth: 400, margin: "auto", padding: 4 }}>
-      <Typography variant="h4" sx={{ mb: 3 }}>Sign Up</Typography>
+    <div className="auth-page">
 
-      {error && <Typography color="error" sx={{ mb: 2 }}>{error}</Typography>}
+      {/* Left panel */}
+      <div className="auth-panel">
+        <div className="auth-panel__logo">
+          <Link to="/" className="auth-logo">
+            <div className="auth-logo__icon">🐶</div>
+            <span className="auth-logo__text">PawConnect</span>
+          </Link>
+        </div>
 
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-      >
-        <TextField
-          name="username"
-          label="Username"
-          value={form.username}
-          onChange={handleChange}
-        />
-        <TextField
-          name="email"
-          label="Email"
-          type="email"
-          value={form.email}
-          onChange={handleChange}
-        />
-        <TextField
-          name="password"
-          label="Password"
-          type="password"
-          value={form.password}
-          onChange={handleChange}
-        />
+        <div className="auth-panel__body">
+          <h1 className="auth-title">Create an account</h1>
+          <p className="auth-sub">Join thousands of families finding their forever companion.</p>
 
-        <Button type="submit" variant="contained" disabled={loading}>
-          {loading ? "Signing up..." : "Sign Up"}
-        </Button>
+          {error && (
+            <div className="auth-error">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" strokeWidth="2.5"
+                strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+              {error}
+            </div>
+          )}
 
-        <Typography variant="body2" textAlign="center">
-          Already have an account? <Link to="/login">Login</Link>
-        </Typography>
-      </Box>
-    </Box>
+          {success && (
+            <div className="auth-success">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" strokeWidth="2.5"
+                strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              {success}
+            </div>
+          )}
+
+          <form className="auth-form" onSubmit={handleSubmit}>
+
+            <div className="auth-field">
+              <label>Username</label>
+              <div className="auth-input-wrap">
+                <svg className="auth-input-icon" width="16" height="16" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" strokeWidth="2"
+                  strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="e.g. johndoe"
+                  onChange={handleChange}
+                  required
+                  autoComplete="username"
+                />
+              </div>
+            </div>
+
+            <div className="auth-field">
+              <label>Email address</label>
+              <div className="auth-input-wrap">
+                <svg className="auth-input-icon" width="16" height="16" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" strokeWidth="2"
+                  strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="you@example.com"
+                  onChange={handleChange}
+                  required
+                  autoComplete="email"
+                />
+              </div>
+            </div>
+
+            <div className="auth-field">
+              <label>Password</label>
+              <div className="auth-input-wrap">
+                <svg className="auth-input-icon" width="16" height="16" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" strokeWidth="2"
+                  strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  placeholder="Create a strong password"
+                  onChange={handleChange}
+                  required
+                  autoComplete="new-password"
+                />
+                <button
+                  type="button"
+                  className="auth-toggle-pw"
+                  onClick={() => setShowPassword(!showPassword)}
+                  tabIndex={-1}
+                >
+                  {showPassword ? (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" strokeWidth="2"
+                      strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                      <line x1="1" y1="1" x2="23" y2="23"/>
+                    </svg>
+                  ) : (
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" strokeWidth="2"
+                      strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" className="auth-btn" disabled={loading}>
+              {loading ? (
+                <><span className="auth-spinner" /> Creating account...</>
+              ) : (
+                "Create Account"
+              )}
+            </button>
+          </form>
+
+          <p className="auth-footer">
+            Already have an account?{" "}
+            <Link to="/login" className="auth-link">Sign in →</Link>
+          </p>
+        </div>
+      </div>
+
+      {/* Right decorative panel */}
+      <div className="auth-visual">
+        <div className="auth-visual__orb auth-visual__orb--1" />
+        <div className="auth-visual__orb auth-visual__orb--2" />
+        <div className="auth-visual__content">
+          <div className="auth-visual__quote">
+            "Every dog deserves a loving family. Every family deserves a loyal companion."
+          </div>
+          <div className="auth-visual__cards">
+            {[
+              { emoji: "🏡", name: "Forever Homes",   breed: "10,000+ families matched" },
+              { emoji: "🐾", name: "200+ Breeds",      breed: "All sizes & temperaments" },
+              { emoji: "💛", name: "Lifetime Support", breed: "We're with you always" },
+            ].map((d) => (
+              <div className="auth-visual__card" key={d.name}>
+                <span className="auth-visual__card-emoji">{d.emoji}</span>
+                <div>
+                  <strong>{d.name}</strong>
+                  <span>{d.breed}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+    </div>
   );
 }
