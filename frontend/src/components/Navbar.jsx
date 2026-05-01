@@ -61,6 +61,10 @@ export default function Navbar() {
               Add Dog
             </Link>
 
+            <Link to="/recommend" className={`paw-nav__link ${isActive("/recommend") ? "active" : ""}`}>
+          ✨ AI Recommend
+            </Link>
+
             <div className="paw-nav__divider" />
 
             {!token ? (

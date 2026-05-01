@@ -7,6 +7,7 @@ import AddDog from "./AddDog";
 import EditDog from "./EditDog";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import DogRecommender from "./DogRecommender";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Route path="/dogs/:id" element={<DogDetails />} />
         <Route path="/add-dog" element={<AddDog />} />
         <Route path="/edit-dog/:id" element={<EditDog />} />
+        <Route path="/recommend" element={<DogRecommender />} />
       </Routes>
     </BrowserRouter>
   );

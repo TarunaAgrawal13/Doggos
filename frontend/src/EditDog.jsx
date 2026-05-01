@@ -1,31 +1,71 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import "./DogForm.css";
+import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import Navbar from "./components/Navbar";
 
 export default function EditDog() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const geocoderContainerRef = useRef(null);
+  const geocoderRef = useRef(null);
 
   const [dog, setDog] = useState({
-    name: "",
-    image: "",
-    title: "",
-    breed: "",
-    age: "",
-    weight: "",
-    color: "",
-    description: "",
+    name: "", image: "", title: "",
+    breed: "", age: "", weight: "",
+    color: "", description: "",
   });
 
+  const [location, setLocation] = useState({
+    type: "Point",
+    coordinates: [0, 0],
+    address: "",
+  });
+
+  // Fetch existing dog data
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_API_URL}/dogs/${id}`)
-      .then((res) => setDog(res.data))
+      .then((res) => {
+        setDog(res.data);
+        if (res.data.location) {
+          setLocation(res.data.location);
+        }
+      })
       .catch((err) => console.log(err));
   }, [id]);
+
+  // Mount geocoder
+  useEffect(() => {
+    if (!geocoderContainerRef.current) return;
+
+    const geocoder = new MapboxGeocoder({
+      accessToken: import.meta.env.VITE_MAPBOX_TOKEN,
+      placeholder: "Search to update location...",
+      types: "place,address",
+    });
+
+    geocoder.addTo(geocoderContainerRef.current);
+    geocoderRef.current = geocoder;
+
+    geocoder.on("result", (e) => {
+      const [lng, lat] = e.result.center;
+      setLocation({
+        type: "Point",
+        coordinates: [lng, lat],
+        address: e.result.place_name,
+      });
+    });
+
+    geocoder.on("clear", () => {
+      setLocation({ type: "Point", coordinates: [0, 0], address: "" });
+    });
+
+    return () => geocoder.onRemove();
+  }, []);
 
   const handleChange = (e) => {
     setDog({ ...dog, [e.target.name]: e.target.value });
@@ -33,9 +73,14 @@ export default function EditDog() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
     try {
       setLoading(true);
-      await axios.put(`${import.meta.env.VITE_API_URL}/dogs/${id}`, dog);
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/dogs/${id}`,
+        { ...dog, location },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       navigate(`/dogs/${id}`);
     } catch (error) {
       console.log(error);
@@ -46,7 +91,6 @@ export default function EditDog() {
   return (
     <>
       <Navbar />
-
       <div className="dog-form-container">
         <h2>Edit <span>Dog</span></h2>
         <p>Update the details below to keep the listing accurate and up to date.</p>
@@ -141,15 +185,25 @@ export default function EditDog() {
               />
             </div>
 
+            <div className="form-divider" />
+
+            {/* Location Geocoder */}
+            <div className="form-group">
+              <label>📍 Location</label>
+              {location.address && (
+                <p className="geocoder-current">
+                  📌 Current: {location.address}
+                </p>
+              )}
+              <div ref={geocoderContainerRef} className="geocoder-wrapper" />
+              <p className="geocoder-hint">Search above to change the location</p>
+            </div>
+
             <button type="submit" disabled={loading}>
               {loading ? (
-                <>
-                  <span className="dog-form-spinner" /> Saving...
-                </>
+                <><span className="dog-form-spinner" /> Saving...</>
               ) : (
-                <>
-                  ✏️ &nbsp; Update Dog
-                </>
+                <>✏️ &nbsp; Update Dog</>
               )}
             </button>
 

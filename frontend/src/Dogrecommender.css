@@ -1,0 +1,255 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* Page */
+.rec-page {
+  min-height: 100vh;
+  background: #f9fafb;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 48px 20px 80px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Card Container */
+.rec-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 40px 40px 36px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Top Accent */
+.rec-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ea580c, #f97316, #fbbf24);
+}
+
+/* Header */
+.rec-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.rec-icon {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.rec-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+
+.rec-sub {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+/* Form */
+.rec-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rec-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rec-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* Select */
+.rec-field select {
+  padding: 10px 13px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 500;
+  color: #111827;
+  background: #fafafa;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  appearance: none;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+}
+
+.rec-field select:focus {
+  border-color: #ea580c;
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.10);
+  background-color: #fff;
+}
+
+/* Button */
+.rec-btn {
+  margin-top: 4px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ea580c, #c2410c);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.rec-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  box-shadow: 0 6px 20px rgba(234, 88, 12, 0.40);
+  transform: translateY(-1px);
+}
+
+.rec-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* Spinner */
+.rec-spinner {
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(255,255,255,0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: rec-spin 0.65s linear infinite;
+}
+
+@keyframes rec-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error */
+.rec-error {
+  margin-top: 20px;
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #dc2626;
+}
+
+/* Result Section */
+.rec-result {
+  margin-top: 28px;
+  padding-top: 28px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.rec-result-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 16px;
+}
+
+/* =========================
+   🐶 CARD UI (MAIN PART)
+========================= */
+
+.rec-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dog-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 16px 18px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  position: relative;
+}
+
+.dog-card:hover {
+  border-color: #ea580c;
+  box-shadow: 0 6px 18px rgba(234, 88, 12, 0.15);
+  transform: translateY(-2px);
+}
+
+.dog-card h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 6px;
+}
+
+.dog-card p {
+  font-size: 13.5px;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+/* Optional icon */
+.dog-card::before {
+  content: "🐶";
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+/* Browse link */
+.rec-browse {
+  display: inline-block;
+  margin-top: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ea580c;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.rec-browse:hover {
+  color: #c2410c;
+}
+
+/* Mobile */
+@media (max-width: 560px) {
+  .rec-card {
+    padding: 28px 22px;
+  }
+
+  .rec-cards {
+    gap: 12px;
+  }
+
+  .dog-card {
+    padding: 14px;
+  }
+}

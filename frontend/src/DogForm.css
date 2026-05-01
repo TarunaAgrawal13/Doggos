@@ -235,3 +235,31 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* Geocoder */
+.geocoder-wrapper .mapboxgl-ctrl-geocoder {
+  width: 100%;
+  max-width: 100%;
+  box-shadow: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.geocoder-wrapper .mapboxgl-ctrl-geocoder input {
+  font-size: 0.95rem;
+  padding: 0.6rem 2.5rem;
+}
+
+.geocoder-selected,
+.geocoder-current {
+  font-size: 0.82rem;
+  color: #16a34a;
+  margin-top: 0.4rem;
+}
+
+.geocoder-hint {
+  font-size: 0.78rem;
+  color: #9ca3af;
+  margin-top: 0.3rem;
+}
